@@ -10,7 +10,7 @@ public class Pointer : MonoBehaviour
 
     private Sequence _sequence;
 
-    private int _score = 1;
+    private int _score = 100;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.TryGetComponent<ScoreZone>(out ScoreZone zone))
@@ -19,11 +19,11 @@ public class Pointer : MonoBehaviour
         }
     }
 
-    public void PointerGo()
+    public void StartMove() 
     {
         _sequence = DOTween.Sequence();
         _sequence.Append(
-        _pointer.DOMoveX(225, 1).SetLoops(100, LoopType.Yoyo).SetEase(Ease.InQuad));
+        _pointer.DOMoveX(225, 0.5f).SetLoops(100, LoopType.Yoyo).SetEase(Ease.Linear));
         StartCoroutine(StopDelay());
     }
 

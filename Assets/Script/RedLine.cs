@@ -1,23 +1,30 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RedLine : MonoBehaviour
 {
     private float _destroyTime = 2;
     private float _speed = 30;
+
+    public event UnityAction<Enemy> MovingEnemyDetected;
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent<Enemy>(out Enemy enemy))
         {
             enemy.SetColor();
+            if(enemy.IsMove)
+            {
+                MovingEnemyDetected(enemy);
+            }
         }
     }
     private void Start()
     {
-        StartCoroutine(TranslateLine());
+        StartCoroutine(TranslateLineCoroutine());
     }
 
-    private IEnumerator TranslateLine()
+    private IEnumerator TranslateLineCoroutine()
     {
         var time = new WaitForEndOfFrame();
         float lifeTime = 0;

@@ -6,11 +6,22 @@ public class LineGenerator : MonoBehaviour
     [SerializeField] private RedLine _prefab;
     [SerializeField] private Transform _ground;
 
-    public event UnityAction StartRedLine;
+    private RedLine _currentLine;
 
+    public event UnityAction<Enemy> MovingEnemyAdded;
+
+    private void OnDisable()
+    {
+        _currentLine.MovingEnemyDetected -= OnMovingEnemyDetected;
+    }
     public void InitRedLine()
     {
-        Instantiate(_prefab, _ground.position, Quaternion.identity);
-        StartRedLine?.Invoke();
+        _currentLine = Instantiate(_prefab, _ground.position, Quaternion.identity);
+        _currentLine.MovingEnemyDetected += OnMovingEnemyDetected;
+    }
+
+    private void OnMovingEnemyDetected(Enemy enemy)
+    {
+        MovingEnemyAdded?.Invoke(enemy);
     }
 }

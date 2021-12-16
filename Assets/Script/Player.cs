@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private Camera _weaponCamera;
     [SerializeField] private Joystick _joystick;
+
+    public event UnityAction<Enemy> EnemyKilled;
 
     private void Update()
     {
@@ -31,7 +34,8 @@ public class Player : MonoBehaviour
         {
             if(hit.collider.TryGetComponent<Enemy>(out Enemy enemy))
             {
-                enemy.ApplyHit();
+                    EnemyKilled?.Invoke(enemy);
+                    enemy.ApplyHit();
             }
         }
     }
