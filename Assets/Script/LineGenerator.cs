@@ -12,6 +12,7 @@ public class LineGenerator : MonoBehaviour
 
     private void OnDisable()
     {
+        if(_currentLine !=null)
         _currentLine.MovingEnemyDetected -= OnMovingEnemyDetected;
     }
     public void InitRedLine()

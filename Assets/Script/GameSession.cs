@@ -50,8 +50,8 @@ public class GameSession : MonoBehaviour
 
     public void StartSession()
     {
-        _timeCountdown.text = "RED LINE";
-        Vector3 middleCameraPosition = new Vector3(-17.83f, 4.4f, 28.03f);
+        _timeCountdown.text = "RED LINE!";
+        Vector3 middleCameraPosition = new Vector3(-15.83f, 4.4f, 28.03f);
         _camera.DOMove(middleCameraPosition, 2).OnComplete(() => StartCoroutine(CountdownTime()));
     }
 
@@ -59,7 +59,7 @@ public class GameSession : MonoBehaviour
     {
         var time = new WaitForEndOfFrame();
         float countdownTime = 3;
-        Vector3 finishCameraPosition = new Vector3(-16.81f, 3.70f, 28.03f);
+        Vector3 finishCameraPosition = new Vector3(-15.81f, 3.70f, 28.03f);
         while (countdownTime>=0)
         {
             _timeCountdown.text = Mathf.Round(countdownTime).ToString();

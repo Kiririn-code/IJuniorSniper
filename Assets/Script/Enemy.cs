@@ -5,12 +5,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer _renderer;
     [SerializeField] private Animator _animator;
-
-    [SerializeField] private Material _redMaterial;
-    [SerializeField] private Material _greenMaterial;
     [SerializeField] private GameObject _particlePrefub;
 
-    private Material _startMaterial;
     private bool _isMove = true;
     private const string Walk = "Walk";
     private const string Die = "Die";
@@ -26,18 +22,17 @@ public class Enemy : MonoBehaviour
 
     public void SetColor()
     {
-        _startMaterial = _renderer.material;
-        _renderer.material = _isMove ? _redMaterial : _greenMaterial;
+        _renderer.material.color = _isMove ? Color.red : Color.green;
         IsRed = _isMove ? true : false;
     }
 
     public void ApplyHit()
     {
-        _renderer.material = _startMaterial;
-        gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        _renderer.material.color = Color.white;
+        Instantiate(_particlePrefub, transform.position,Quaternion.identity);
         _animator.SetTrigger(Die);
-        Instantiate(_particlePrefub, transform);
-        Destroy(gameObject, 1.5f);
+        gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        Destroy(gameObject, 2f);
     }
 
     private IEnumerator WalkForwardCoroutine()
