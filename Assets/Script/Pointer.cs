@@ -23,7 +23,7 @@ public class Pointer : MonoBehaviour
     {
         _sequence = DOTween.Sequence();
         _sequence.Append(
-        _pointer.DOMoveX(225, 0.5f).SetLoops(100, LoopType.Yoyo).SetEase(Ease.Linear));
+        _pointer.DOLocalMoveX(-200, 0.5f).SetLoops(100, LoopType.Yoyo).SetEase(Ease.Linear));
         StartCoroutine(StopDelay());
     }
 

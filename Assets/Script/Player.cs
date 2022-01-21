@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
-
 public class Player : MonoBehaviour
 {
     [SerializeField] private Camera _weaponCamera;
     [SerializeField] private Joystick _joystick;
     [SerializeField] private Animator _animator;
+    [SerializeField] private GameObject _particlePrefub;
 
     public event UnityAction<Enemy> EnemyKilled;
 
@@ -38,6 +38,8 @@ public class Player : MonoBehaviour
             {
                     EnemyKilled?.Invoke(enemy);
                     enemy.ApplyHit();
+                var hitPoint = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+                Instantiate(_particlePrefub, hitPoint, Quaternion.identity);
             }
         }
     }

@@ -10,10 +10,10 @@ public class LineGenerator : MonoBehaviour
 
     public event UnityAction<Enemy> MovingEnemyAdded;
 
-    private void OnDisable()
+    public void Restart()
     {
-        if(_currentLine !=null)
         _currentLine.MovingEnemyDetected -= OnMovingEnemyDetected;
+        InitRedLine();
     }
     public void InitRedLine()
     {

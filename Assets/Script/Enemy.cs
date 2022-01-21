@@ -1,16 +1,16 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer _renderer;
     [SerializeField] private Animator _animator;
-    [SerializeField] private GameObject _particlePrefub;
 
     private bool _isMove = true;
     private const string Walk = "Walk";
     private const string Die = "Die";
-
+    public event UnityAction<Enemy> Died;
 
     public bool IsMove { get => _isMove; }
     public bool IsRed { get; private set; }
@@ -29,9 +29,9 @@ public class Enemy : MonoBehaviour
     public void ApplyHit()
     {
         _renderer.material.color = Color.white;
-        Instantiate(_particlePrefub, transform.position,Quaternion.identity);
         _animator.SetTrigger(Die);
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
+        Died?.Invoke(this);
         Destroy(gameObject, 2f);
     }
 

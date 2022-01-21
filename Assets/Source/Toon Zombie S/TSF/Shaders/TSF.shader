@@ -1,10 +1,7 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "TSF/Base1" 
 {
     Properties 
     {
-		[MaterialToggle(_OUTL_ON)] _Outl ("Outline", Float) = 0 						//0
 		[MaterialToggle(_TEX_ON)] _DetailTex ("Enable Detail texture", Float) = 0 	//1
 		_MainTex ("Detail", 2D) = "white" {}        								//2
 		_ToonShade ("Shade", 2D) = "white" {}  										//3
@@ -12,15 +9,6 @@ Shader "TSF/Base1"
 		_Color ("Base Color", Color) = (1,1,1,1)									//5	
 		[MaterialToggle(_VCOLOR_ON)] _VertexColor ("Enable Vertex Color", Float) = 0//6        
 		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7	
-		[MaterialToggle(_DS_ON)] _DS ("Enable DoubleSided", Float) = 0				//8	
-		[Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull mode", Float) = 2		//9	
-		_OutlineColor ("Outline Color", Color) = (0.5,0.5,0.5,1.0)					//10
-		_Outline ("Outline width", Float) = 0.01									//11
-		[MaterialToggle(_ASYM_ON)] _Asym ("Enable Asymmetry", Float) = 0        	//12
-		_Asymmetry ("OutlineAsymmetry", Vector) = (0.0,0.25,0.5,0.0)     			//13
-		[MaterialToggle(_TRANSP_ON)] _Trans ("Enable Transparency", Float) = 0   	//14
-		[Enum(TRANS_OPTIONS)] _TrOp ("Transparency mode", Float) = 0                //15
-		_Cutoff ("Alpha cutoff", Range(0,1)) = 0.5                                  //16
     }
    
     Subshader 
@@ -28,7 +16,7 @@ Shader "TSF/Base1"
     	Tags { "RenderType"="Opaque" }
 		LOD 250
     	ZWrite On
-	   	Cull [_Cull]
+	   	Cull Back
 		Lighting Off
 		Fog { Mode Off }
 		
@@ -70,9 +58,11 @@ Shader "TSF/Base1"
                 {
                     v2f o;
                     o.pos = UnityObjectToClipPos ( v.vertex );
-                    float3 n = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
-                    n = n * float3(0.5,0.5,0.5) + float3(0.5,0.5,0.5);
-                    o.uvn = n.xy;
+                    float3 normalP = normalize(v.normal);
+                    float3 n = UnityObjectToWorldNormal(normalP);
+                    float2 uvM = mul((float3x3)UNITY_MATRIX_V, n).xy;
+                    uvM = ( uvM * float2(0.5, 0.5) ) + float2(0.5, 0.5);
+                    o.uvn = uvM;
                      #if _TEX_ON
                     o.uv = TRANSFORM_TEX ( v.texcoord, _MainTex );
                     #endif
@@ -104,6 +94,5 @@ Shader "TSF/Base1"
             ENDCG
         }
     }
-    CustomEditor "TSF"
-    Fallback "Diffuse"
+    Fallback "Legacy Shaders/Diffuse"
 }
